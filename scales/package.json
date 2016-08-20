@@ -1,0 +1,33 @@
+{
+  "name": "scales",
+  "version": "1.0.0",
+  "description": "A web application that plays scales",
+  "scripts": {
+    "test": "webpack",
+    "start": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raff/music/scales"
+  },
+  "keywords": [
+    "music",
+    "scales",
+    "sharp11",
+    "vexflow"
+  ],
+  "author": "Raffaele Sena",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/raff/music/scales/issues"
+  },
+  "homepage": "https://github.com/raff/music/scales#readme",
+  "devDependencies": {
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "sharp11": "^1.1.4",
+    "sharp11-web-audio": "^1.0.1",
+    "vexflow": "^1.2.63"
+  }
+}

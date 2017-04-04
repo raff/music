@@ -1,0 +1,35 @@
+{
+  "name": "chords",
+  "version": "1.0.0",
+  "description": "A web application that plays chord changes",
+  "scripts": {
+    "start": "webpack-dev-server --content-base ./app --hot --port 8080",
+    "test": "webpack",
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raff/music/chords"
+  },
+  "keywords": [
+    "music",
+    "scales",
+    "sharp11",
+    "vexflow"
+  ],
+  "author": "Raffaele Sena",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/raff/music/chords/issues"
+  },
+  "homepage": "https://github.com/raff/music/chords#readme",
+  "devDependencies": {
+    "webpack": "^2.3.3",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "sharp11": "^1.1.4",
+    "sharp11-web-audio": "^1.0.1",
+    "vexflow": "^1.2.83"
+  }
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Chord Changes</title>
+    <link rel="stylesheet" href="pure-min.css">
+    <link rel="stylesheet" href="base-min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+        margin: 20px;
+      }
+
+      div {
+        border: 1px solid lightgray;
+      }
+
+      #play {
+        margin-left: 20px;
+      }
+
+      fieldset {
+        display: inline;
+      }
+
+      @media print {
+        .no-print {
+            display: none;
+        }
+
+        body {
+            margin: 8px;
+        }
+
+        h1, h2, h3, h4, h5 {
+            display: none !important;
+        }
+
+        form {
+            display: none !important;
+        }
+
+        div {
+            page-break-inside: avoid;
+        }
+
+        @page {
+            margin: 1cm;
+        }
+      }
+
+      @media screen {
+        .print-only {
+            display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Chord Changes</h2>
+    <div id="input">
+      Chord: <input type="text" id="chord"/>
+    </div>
+    <div id="staff"></div>
+  </body>
+  <script type="text/javascript" src="app.bundle.js" charset="utf-8"></script>
+  <script>
+    var ele = document.querySelector('#chord');
+    ele.addEventListener('keydown', function(e) {
+      if (e.keyCode == 13) {
+        addChord(this);
+      }
+    });
+
+    initScore('staff');
+  </script>
+</html>

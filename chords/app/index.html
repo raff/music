@@ -12,15 +12,15 @@
       }
 
       div {
-        border: 1px solid lightgray;
+        x-border: 1px solid lightgray;
       }
 
-      #play {
-        margin-left: 20px;
+      #add {
+        margin-right: 20px;
       }
 
       fieldset {
-        display: inline;
+          display: inline;
       }
 
       @media print {
@@ -58,18 +58,47 @@
   </head>
   <body>
     <h2>Chord Changes</h2>
-    <div id="input">
-      Chord: <input type="text" id="chord"/>
-    </div>
+    <form id="input" name="input" class="pure-form" onsubmit="event.preventDefault()">
+      <select id="type" onchange="changeOutputType(document.input.type.value)">
+        <option value="chord">Chord</option>
+        <option value="scale">Scale</option>
+      </select>
+      <input type="text" id="chord"/>
+      <button id="add" class="pure-button pure-button-primary">Add</button>
+
+      <fieldset class="no-print">
+        <label for="concert">
+          <input type="radio" name="pitch" value="0" checked id="concert"> Concert pitch &nbsp;</input>
+        </label>
+
+        <label for="alto">
+          <input type="radio" name="pitch" value="6" id="alto"> Alto (Eb) &nbsp;</input>
+        </label>
+
+        <label for="tenor">
+          <input type="radio" name="pitch" value="9" id="tenor"> Tenor (Bb)</input>
+        </label>
+
+        <button id="play" class="pure-button pure-button-primary"
+                onclick="playNotes(document.input.pitch.value)">Play</button>
+      </fieldset>
+    </form>
     <div id="staff"></div>
+    <div id="chords"></div>
   </body>
   <script type="text/javascript" src="app.bundle.js" charset="utf-8"></script>
   <script>
-    var ele = document.querySelector('#chord');
-    ele.addEventListener('keydown', function(e) {
+    var inp = document.querySelector('#chord');
+    var out = document.querySelector('#chords');
+
+    inp.addEventListener('keydown', function(e) {
       if (e.keyCode == 13) {
-        addChord(this);
+        addChord(this, out);
       }
+    });
+
+    document.querySelector('#add').addEventListener('click', function(e) {
+        addChord(inp, out);
     });
 
     initScore('staff');

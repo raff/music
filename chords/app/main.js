@@ -1,6 +1,7 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+document.addEventListener('DOMContentLoaded', () => {
+  // do your setup here
+  console.log('Initialized app');
+});
 
 var s11 = require('sharp11');
 var audio = require('sharp11-web-audio');
@@ -23,7 +24,7 @@ var outputType = 'chord';
 var notelist = [];
 var chordlist = [];
 
-initScore = function(sel) {
+var initScore = function(sel) {
   cw = window.innerWidth - 60;
   ch = window.innerHeight;
 
@@ -35,7 +36,7 @@ initScore = function(sel) {
 
   vf = new VF.Factory({
     renderer: {
-        selector: sel,
+        elementId: sel,
         width: cw,
         height: ch
     }
@@ -44,14 +45,18 @@ initScore = function(sel) {
   score = vf.EasyScore();
 }
 
-function system() {
+function system(nl) {
     ns += 1;
 
-    if ((x + w) >= cw) { 
+    if ((x + w) >= cw || ns > 4) { 
         console.log(x, w, cw);
         x = 20;
         y += 120;
         ns = 1;
+    }
+
+    if (nl) {
+        ns = 4
     }
 
     var s = vf.System({x: x, y: y, width: w});
@@ -59,8 +64,8 @@ function system() {
     return s;
 }
 
-function drawStave(text, notes) {
-  var stave = system().addStave({voices: [score.voice(score.notes(notes), {time: "8/4"}).setStrict(false)]})
+function drawStave(text, notes, nl) {
+  var stave = system(nl).addStave({voices: [score.voice(score.notes(notes), {time: "8/4"}).setStrict(false)]})
     .setText(text, VF.Modifier.Position.ABOVE, {justification: VF.TextNote.Justification.LEFT});
 
   if (ns == 1) {
@@ -73,11 +78,11 @@ function drawStave(text, notes) {
   vf.draw();
 }
 
-changeOutputType = function(otype) {
+var changeOutputType = function(otype) {
     outputType = otype;
 }
 
-addChord = function(inp, out) {
+var addChord = function(inp, out) {
   var clist;
 
   if (typeof(inp)==='string') {
@@ -101,21 +106,37 @@ addChord = function(inp, out) {
       notelist = notelist.concat(c.chord);
 
       cname = c.root.name + c.symbol;
-      if (c.bass) {
-        cname += '/' + c.bass.fullName
+      if (c.bass !== null) {
+        cname += '/' + c.bass.name
       }
       chordlist.push(cname)
 
-      var snotes;
-
       if (outputType === 'chord') {
-        snotes = c.chord.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
-      } else {
-        snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
-      }
+        //
+        // display chord
+        //
+        var snotes = c.chord.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
 
-      console.log(outputType, cname, snotes);
-      drawStave(cname, snotes);
+        console.log('chord', outputType, cname, snotes);
+        drawStave(cname, snotes, false);
+      } else if (outputType === 'scale') {
+        //
+        // display scale
+        //
+        var snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
+        console.log('scale', outputType, cname, snotes);
+        drawStave(cname, snotes, false);
+      } else {
+        // 
+        // display chord and scale
+        //
+        var cnotes = c.chord.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
+        var snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
+        console.log("chord", cname, cnotes);
+        drawStave(cname, cnotes, false);
+        console.log("scale", cname, snotes);
+        drawStave(cname, snotes, true);
+      }
 
       if (out) {
         out.innerText = chordlist.join(",")
@@ -123,7 +144,7 @@ addChord = function(inp, out) {
   });
 }
 
-playNotes = function(t) {
+var playNotes = function(t) {
     audio.init(function (err, fns) {
         if (err != undefined) {
             alert(err);
@@ -137,4 +158,8 @@ playNotes = function(t) {
             fns.arpeggiate(n, 0.5);
         }
     });
+}
+
+export {
+    initScore, changeOutputType, addChord, playNotes
 }

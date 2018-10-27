@@ -1,6 +1,7 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+document.addEventListener('DOMContentLoaded', () => {
+  // do your setup here
+  console.log('Initialized app');
+});
 
 var _ = require('underscore');
 var s11 = require('sharp11');
@@ -25,7 +26,7 @@ function scaleName(n) {
     return modes[(n-1) % modes.length].replace("{}", root.transpose('' + n).name);
 }
 
-drawScales = function(ele, k, start) {
+var drawScales = function(ele, k, start) {
     key = k;
     start = start || 1
     root = s11.note.create(key).inOctave(4);
@@ -100,21 +101,34 @@ drawScales = function(ele, k, start) {
       // Add chord
       vnotes.push(new VF.BarNote(VF.Barline.SINGLE));
 
-      var vchord = [];
-      var acc = [];
+      if (true) {
+          var vchord = [];
+          var acc = [];
 
-      for (var j=0; j < seq.length; j += 2) {
-        var n = seq[j];
-        var vn = n.name.toLowerCase() + '/' + n.octave;
-        vchord.push(vn);
-        acc.push(n.acc);
-      }
+          for (var j=0; j < seq.length; j += 2) {
+            var n = seq[j];
+            var vn = n.name.toLowerCase() + '/' + n.octave;
+            vchord.push(vn);
+            acc.push(n.acc);
+          }
 
-      sn = new VF.StaveNote({keys: vchord, duration: 'q'});
-      for (var j=0; j < acc.length; j++) {
-        if (acc[j] != 'n') {
-            sn.addAccidental(j, new VF.Accidental(acc[j]));
-        }
+          sn = new VF.StaveNote({keys: vchord, duration: 'q'});
+          for (var j=0; j < acc.length; j++) {
+            if (acc[j] != 'n') {
+                sn.addAccidental(j, new VF.Accidental(acc[j]));
+            }
+          }
+      } else {
+          for (var j=0; j < seq.length; j += 2) {
+            var n = seq[j];
+            var vn = n.name.toLowerCase() + '/' + n.octave;
+            var sn = new VF.StaveNote({keys: [vn], duration: 'q'});
+            if (n.acc != 'n') {
+                sn.addAccidental(0, new VF.Accidental(n.acc));
+            }
+
+            vnotes.push(sn);
+          }
       }
 
       vnotes.push(sn);
@@ -135,7 +149,7 @@ drawScales = function(ele, k, start) {
     }
 }
 
-playThing = function(t) {
+var playThing = function(t) {
     audio.init(function (err, fns) {
         if (err != undefined) {
             alert(err);
@@ -159,4 +173,8 @@ playThing = function(t) {
             fns.arpeggiate(n, 0.5);
         }
     });
+}
+
+export {
+    drawScales, playThing
 }

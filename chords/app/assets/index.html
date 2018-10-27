@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>Chord Changes</title>
-    <link rel="stylesheet" href="pure-min.css">
-    <link rel="stylesheet" href="base-min.css">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chord Changes</title>
+    <link rel="stylesheet" href="app.css">
+    <!-- script src="vendor.js"></script -->
+    <script src="app.js"></script>
+    <script>app = require('main');</script>
     <style>
       body {
         margin: 20px;
@@ -59,9 +61,10 @@
   <body>
     <h2>Chord Changes</h2>
     <form id="input" name="input" class="pure-form" onsubmit="event.preventDefault()">
-      <select id="type" onchange="changeOutputType(document.input.type.value)">
+      <select id="type" onchange="app.changeOutputType(document.input.type.value)">
         <option value="chord">Chord</option>
         <option value="scale">Scale</option>
+        <option value="chord-scale">Chord&Scale</option>
       </select>
       <input type="text" id="chord"/>
       <button id="add" class="pure-button pure-button-primary">Add</button>
@@ -80,27 +83,26 @@
         </label>
 
         <button id="play" class="pure-button pure-button-primary"
-                onclick="playNotes(document.input.pitch.value)">Play</button>
+                onclick="app.playNotes(document.input.pitch.value)">Play</button>
       </fieldset>
     </form>
     <div id="staff"></div>
     <div id="chords"></div>
   </body>
-  <script type="text/javascript" src="app.bundle.js" charset="utf-8"></script>
   <script>
     var inp = document.querySelector('#chord');
     var out = document.querySelector('#chords');
 
     inp.addEventListener('keydown', function(e) {
       if (e.keyCode == 13) {
-        addChord(this, out);
+        app.addChord(this, out);
       }
     });
 
     document.querySelector('#add').addEventListener('click', function(e) {
-        addChord(inp, out);
+        app.addChord(inp, out);
     });
 
-    initScore('staff');
+    app.initScore('staff');
   </script>
 </html>

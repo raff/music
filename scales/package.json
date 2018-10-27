@@ -1,11 +1,8 @@
 {
   "name": "scales",
-  "version": "1.0.0",
+  "private": true,
   "description": "A web application that plays scales",
-  "scripts": {
-    "test": "webpack",
-    "start": "webpack -p"
-  },
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/raff/music/scales"
@@ -22,12 +19,22 @@
     "url": "https://github.com/raff/music/scales/issues"
   },
   "homepage": "https://github.com/raff/music/scales#readme",
-  "devDependencies": {
-    "webpack": "^1.13.1"
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production",
+    "deploy": "aws --profile r s3 sync public s3://sailrs.com/music/scales/"
   },
   "dependencies": {
     "sharp11": "^1.1.4",
-    "sharp11-web-audio": "^1.0.1",
-    "vexflow": "^1.2.83"
+    "sharp11-web-audio": "^1.0.5",
+    "vexflow": "^1.2.87"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "babel-brunch": "~6.0",
+    "babel-preset-latest": "^6",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "uglify-js-brunch": "^2"
   }
 }

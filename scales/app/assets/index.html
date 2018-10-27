@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Diatonic Scales</title>
-    <link rel="stylesheet" href="pure-min.css">
-    <link rel="stylesheet" href="base-min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diatonic Scales</title>
+  <link rel="stylesheet" href="app.css">
+  <!-- script src="vendor.js"></script -->
+  <script src="app.js"></script>
+  <script>app = require('main');</script>
+
     <style>
       body {
         margin: 20px;
@@ -65,7 +67,7 @@
       <fieldset>
         <label for="key">Scale
           <select name="key" id="keyselection"
-            onchange="drawScales('#staff', document.player.keyselection.value, document.player.start.value)">
+            onchange="app.drawScales('#staff', document.player.keyselection.value, document.player.start.value)">
             <option>C</option>
             <option>G</option>
             <option>D</option>
@@ -83,7 +85,7 @@
 
         <label for="start">/
           <select name="start" id="start"
-            onchange="drawScales('#staff', document.player.keyselection.value, document.player.start.value)">
+            onchange="app.drawScales('#staff', document.player.keyselection.value, document.player.start.value)">
             <option value="1">I</option>
             <option value="2">ii</option>
             <option value="3">iii</option>
@@ -110,7 +112,7 @@
         </label>
 
         <button id="play" class="pure-button pure-button-primary"
-                onclick="playThing(document.player.pitch.value)">Play</button>
+                onclick="app.playThing(document.player.pitch.value)">Play</button>
       </fieldset>
 
     </form>
@@ -118,17 +120,13 @@
     <div id="staff"></div>
   </body>
 
-  <script type="text/javascript" src="app.bundle.js" charset="utf-8"></script>
   <script>
-    // You can also require other files to run in this process
-    // require('./renderer.js')
-
     function drawPages() {
         var opt = document.querySelector("#keyselection option");
         var div = document.querySelector("#staff");
 
         while (true) {
-            drawScales(div, opt.value);
+            app.drawScales(div, opt.value);
 
             opt = opt.nextElementSibling;
             if (opt !== null) {

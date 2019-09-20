@@ -24,6 +24,12 @@ var outputType = 'chord';
 var notelist = [];
 var chordlist = [];
 
+var colors = {
+    scale: "gray",
+    chord: "orange",
+    lead: "red"
+    };
+
 var initScore = function(sel) {
   cw = window.innerWidth - 60;
   ch = window.innerHeight;
@@ -68,15 +74,18 @@ function drawStave(text, notes, nl, color) {
   var snotes = score.notes(notes);
   if (color) {
     if (snotes.length == 7) {
-        snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
-        snotes[2].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
-        snotes[4].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
-        snotes[6].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+        snotes[0].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // ROOT
+        snotes[1].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
+        snotes[2].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 3
+        snotes[3].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
+        snotes[4].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // 5
+        snotes[5].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
+        snotes[6].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 7
     } else if (snotes.length == 4) {
-        snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
-        snotes[1].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
-        snotes[2].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
-        snotes[3].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+        snotes[0].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // ROOT
+        snotes[1].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 3
+        snotes[2].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // 5
+        snotes[3].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 7
     }
   }
   var stave = system(nl).addStave({voices: [score.voice(snotes, {time: "8/4"}).setStrict(false)]})

@@ -66,11 +66,18 @@ function system(nl) {
 
 function drawStave(text, notes, nl, color) {
   var snotes = score.notes(notes);
-  if (color && snotes.length == 7) {
-    snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
-    snotes[2].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
-    snotes[4].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
-    snotes[6].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+  if (color) {
+    if (snotes.length == 7) {
+        snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
+        snotes[2].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
+        snotes[4].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
+        snotes[6].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+    } else if (snotes.length == 4) {
+        snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
+        snotes[1].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
+        snotes[2].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
+        snotes[3].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+    }
   }
   var stave = system(nl).addStave({voices: [score.voice(snotes, {time: "8/4"}).setStrict(false)]})
     .setText(text, VF.Modifier.Position.ABOVE, {justification: VF.TextNote.Justification.LEFT});
@@ -125,7 +132,7 @@ var addChord = function(inp, out) {
         var snotes = c.chord.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
 
         console.log('chord', outputType, cname, snotes);
-        drawStave(cname, snotes, false);
+        drawStave(cname, snotes, false, true);
       } else if (outputType === 'scale') {
         //
         // display scale
@@ -151,18 +158,23 @@ var addChord = function(inp, out) {
   });
 }
 
-var playNotes = function(t) {
+var playNotes = function(tr, tones) {
     audio.init(function (err, fns) {
         if (err != undefined) {
             alert(err);
         } else {
             var n = Array.from(notelist);
-            if (t != 0) {
-                n = n.map(function(v) { return v.transposeDown("" + t); });
+            var d = 0.5;
+            if (tones == "lead") { // play 3rd and 7th of (1, 3, 5, 7)
+                n = n.filter(function(v,i) { return i % 2; });
+                d = 2.0;
+            }
+            if (tr != 0) {
+                n = n.map(function(v) { return v.transposeDown("" + tr); });
             }
 
             console.log(n.toString());
-            fns.arpeggiate(n, 0.5);
+            fns.arpeggiate(n, d);
         }
     });
 }

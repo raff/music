@@ -83,7 +83,15 @@
         </label>
 
         <button id="play" class="pure-button pure-button-primary"
-                onclick="app.playNotes(document.input.pitch.value)">Play</button>
+                onclick="app.playNotes(document.input.pitch.value, document.input.tones.value)">Play</button>
+
+        <label for="ctone">
+          <input type="radio" name="tones" value="chord" checked id="ctone"> Chord tones &nbsp;</input>
+        </label>
+
+        <label for="ltone">
+          <input type="radio" name="tones" value="lead" id="ltone"> Leading tones &nbsp;</input>
+        </label>
       </fieldset>
     </form>
     <div id="staff"></div>

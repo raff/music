@@ -64,8 +64,15 @@ function system(nl) {
     return s;
 }
 
-function drawStave(text, notes, nl) {
-  var stave = system(nl).addStave({voices: [score.voice(score.notes(notes), {time: "8/4"}).setStrict(false)]})
+function drawStave(text, notes, nl, color) {
+  var snotes = score.notes(notes);
+  if (color && snotes.length == 7) {
+    snotes[0].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // ROOT
+    snotes[2].setStyle({fillStyle: "red", strokeStyle: "red"}); // 3
+    snotes[4].setStyle({fillStyle: "orange", strokeStyle: "orange"}); // 5
+    snotes[6].setStyle({fillStyle: "red", strokeStyle: "red"}); // 7
+  }
+  var stave = system(nl).addStave({voices: [score.voice(snotes, {time: "8/4"}).setStrict(false)]})
     .setText(text, VF.Modifier.Position.ABOVE, {justification: VF.TextNote.Justification.LEFT});
 
   if (ns == 1) {
@@ -125,17 +132,17 @@ var addChord = function(inp, out) {
         //
         var snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
         console.log('scale', outputType, cname, snotes);
-        drawStave(cname, snotes, false);
+        drawStave(cname, snotes, false, true);
       } else {
         // 
         // display chord and scale
         //
         var cnotes = c.chord.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
-        var snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/q' : ''); }).join(",");
-        console.log("chord", cname, cnotes);
-        drawStave(cname, cnotes, false);
+        var snotes = c.scale().inOctave(octave).scale.map(function(n, i) { return n.fullName + (i===0 ? '/8' : ''); }).join(",");
         console.log("scale", cname, snotes);
-        drawStave(cname, snotes, true);
+        drawStave(cname, snotes, false);
+        console.log("chord", cname, cnotes);
+        drawStave(cname, cnotes, true);
       }
 
       if (out) {

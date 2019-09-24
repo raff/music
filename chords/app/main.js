@@ -28,7 +28,8 @@ var cnamelist = [];
 var colors = {
     scale: "gray",
     chord: "orange",
-    lead: "red"
+    lead: "red",
+    color: "purple"
     };
 
 var initScore = function(sel) {
@@ -74,14 +75,20 @@ function system(nl) {
 function drawStave(text, notes, nl, color) {
   var snotes = score.notes(notes);
   if (color) {
-    if (snotes.length >= 7) {
-        snotes[0].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // ROOT
-        snotes[1].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
-        snotes[2].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 3
-        snotes[3].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
-        snotes[4].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // 5
-        snotes[5].setStyle({fillStyle: colors.scale, strokeStyle: colors.scale});
-        snotes[6].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 7
+    if (outputType == "scale") {
+        snotes.forEach(function(n, i) {
+            if (i == 2 || i == 6) {
+                n.setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // lead tone (3, 7)
+            } else if (i % 2 == 0) {
+                if (i < 7) {
+                    n.setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // chord tone
+                } else {
+                    n.setStyle({fillStyle: colors.color, strokeStyle: colors.color}); // color tone
+                }
+            } else {
+                n.setStyle({fillStyle: colors.scale, strokeStyle: colors.scale}); // scale tone
+            }
+        });
     } else {
         snotes[0].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // ROOT
         snotes[1].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 3
@@ -181,21 +188,22 @@ var playNotes = function(tr, play) {
             var d = 0.5;
             if (play == "ltone") { // play 3rd and 7th of (1, 3, 5, 7)
                 n = n.filter(function(v,i) { return i % 2; });
-                d = 2.0;
+                d = 1.0;
             }
             if (tr != 0) {
                 n = n.map(function(v) { return v.transposeDown("" + tr); });
             }
 
 	    if (play == "chord") {
-                for (var i=0; i < chordlist.length; i++) {
-			var c = chordlist[i];
-            		console.log("play", c);
-			fns.play(c.chord, 0, d);
-		}
+                d = 1.0;
+
+                chordlist.forEach(function (c, i) {
+                    console.log("play", c.toString());
+                    fns.play(c.chord, i * d, d);
+                });
 	    } else {
             	console.log("play", n.toString());
-            	fns.arpeggiate(n, d);
+                fns.arpeggiate(n, 0, d);
 	    }
         }
     });

@@ -81,22 +81,24 @@ function drawStave(text, notes, nl, color) {
                 n.setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // lead tone (3, 7)
             } else if (i % 2 == 0) {
                 if (i < 7) {
-                    n.setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // chord tone
+                    n.setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // chord tone (1, 5)
                 } else {
-                    n.setStyle({fillStyle: colors.color, strokeStyle: colors.color}); // color tone
+                    n.setStyle({fillStyle: colors.color, strokeStyle: colors.color}); // color tone (9, 11...)
                 }
             } else {
                 n.setStyle({fillStyle: colors.scale, strokeStyle: colors.scale}); // scale tone
             }
         });
     } else {
-        snotes[0].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // ROOT
-        snotes[1].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 3
-        snotes[2].setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // 5
-
-	if (snotes.length > 3) {
-        	snotes[3].setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // 7
-	}
+        snotes.forEach(function(n, i) {
+            if (i == 1 || i == 3) {
+                n.setStyle({fillStyle: colors.lead, strokeStyle: colors.lead}); // lead tone (3, 7)
+            } else if (i < 4) {
+                    n.setStyle({fillStyle: colors.chord, strokeStyle: colors.chord}); // chord tone (1, 5)
+            } else {
+                n.setStyle({fillStyle: colors.color, strokeStyle: colors.color}); // color tone (9, 11...)
+            }
+	});
     }
   }
   var stave = system(nl).addStave({voices: [score.voice(snotes, {time: "8/4"}).setStrict(false)]})

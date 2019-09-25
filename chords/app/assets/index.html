@@ -25,6 +25,14 @@
           display: inline;
       }
 
+      #chords {
+          min-width: 80px !important;
+          height: 2em;
+          border: 1px solid black;
+          padding: 5px;
+          background-color: lightgray;
+      }
+
       @media print {
         .no-print {
             display: none;
@@ -101,7 +109,9 @@
       </fieldset>
     </form>
     <div id="staff"></div>
-    <div id="chords"></div>
+    <br/>
+    <span id="chords">&nbsp;</span>
+    <button id="copy" class="pure-button pure-button-primary no-print">Copy</button>
   </body>
   <script>
     var inp = document.querySelector('#chord');
@@ -115,6 +125,17 @@
 
     document.querySelector('#add').addEventListener('click', function(e) {
         app.addChord(inp, out);
+    });
+
+    document.querySelector("#copy").addEventListener("click", function(e) {
+        var range = document.createRange();
+        var sel = window.getSelection();
+
+        range.selectNode(document.querySelector("#chords"));
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        document.execCommand("copy");
     });
 
     app.initScore('staff');

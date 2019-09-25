@@ -133,9 +133,9 @@ var addChord = function(inp, out) {
   }
 
   clist.split(/[, ]/).forEach(function(cname) {
-      cname = cnam.trim();
+      cname = cname.trim();
       if (cname == "") {
-        continue;
+        return;
       }
       if (cname == '%') {
         var l = chordlist.length;

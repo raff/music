@@ -21,7 +21,7 @@
   "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production",
-    "deploy": "aws --profile r s3 sync public s3://sailrs.com/music/chords"
+    "deploy": "aws --profile r s3 sync --exclude '*.map' public s3://sailrs.com/music/chords"
   },
   "dependencies": {
     "sharp11": "^2.0.2",

@@ -132,7 +132,17 @@ var addChord = function(inp, out) {
     return;
   }
 
-  clist.split(",").forEach(function(cname) {
+  clist.split(/[, ]/).forEach(function(cname) {
+      cname = cnam.trim();
+      if (cname == "") {
+        continue;
+      }
+      if (cname == '%') {
+        var l = chordlist.length;
+        if (l > 0) {
+          cname = chordlist[l-1];
+        }
+      }
       var c = s11.chord.create(cname, octave);
       if (! c) {
         console.log("invalid chord name", cname);
@@ -183,6 +193,8 @@ var addChord = function(inp, out) {
 
 var playNotes = function(tr, play) {
     audio.init(function (err, fns) {
+        fns.stop();
+
         if (err != undefined) {
             alert(err);
         } else {
